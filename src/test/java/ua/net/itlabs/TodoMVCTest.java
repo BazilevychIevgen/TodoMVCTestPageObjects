@@ -7,6 +7,7 @@ import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 /**
@@ -20,23 +21,23 @@ public class TodoMVCTest {
         open("https://todomvc4tasj.herokuapp.com/#/");
 
         add("1");
-        add("2");
-
-        editTask("2");
-
-        //complete & clear
-        toggle("2 edited");
-        clearCompleted();
+        editTask("1", "1 edited");
 
         switchTo("Active");
-        escape("1");
-
+        cancelEdit("1 edited", "45");
+        toggle("1 edited");
+        add("2");
         toggleAll();
+        assertNoVisibleTasks();
+
         switchTo("Completed");
-        reopenall();
+        assertVisibleTasks("1 edited", "2");
+        reopen("1 edited");
         switchTo("All");
-        count("1 item left");
-        delete("1");
+        assetItemsLeft("1 item left");
+        delete("1 edited");
+        assertTasksAre("2");
+        clearCompleted();
         assertNoTasks();
 
     }
@@ -73,24 +74,37 @@ public class TodoMVCTest {
         tasks.shouldBe(empty);
     }
 
-    private SelenideElement editTask(String taskText){
-    tasks.find(exactText(taskText)).doubleClick();
-    return tasks.find(cssClass("editing")).find(".edit").setValue("2 edited").pressEnter();
-}
-private void switchTo(String taskTexts){
-    $$("#filters li").find(exactText(taskTexts)).click();
-}
+    private SelenideElement editTask(String oldTaskText, String newTaskText) {
+        tasks.find(exactText(oldTaskText)).doubleClick();
+        return tasks.find(cssClass("editing")).find(".edit").setValue("1 edited").pressEnter();
+    }
 
-    private SelenideElement escape(String taskText){
+    private void switchTo(String taskTexts) {
+        $$("#filters li").find(exactText(taskTexts)).click();
+    }
+
+    private SelenideElement cancelEdit(String taskText, String editText) {
         tasks.find(exactText(taskText)).doubleClick();
         return tasks.find(cssClass("editing")).find(".edit").setValue("45").pressEscape();
     }
-private void reopenall(){
-    $("#toggle-all").doubleClick();
-}
-private void count(String  taskText){
-    $("#todo-count").shouldHave(exactText(taskText));
-}
+
+    private void reopen(String taskText) {
+        tasks.find(exactText(taskText)).$(".toggle").doubleClick();
+    }
+
+    private void assetItemsLeft(String taskText) {
+        $("#todo-count").shouldHave(exactText(taskText));
+    }
+
+    private void assertNoVisibleTasks() {
+        tasks.filter(visible).shouldBe(empty);
+
+    }
+
+    private void assertVisibleTasks(String... taskTexts) {
+        tasks.filter(visible).shouldHave(exactTexts(taskTexts));
+
+    }
 }
 
 
