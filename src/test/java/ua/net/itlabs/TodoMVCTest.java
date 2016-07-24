@@ -16,36 +16,35 @@ public class TodoMVCTest {
 
     @Test
     public void testTaskLifeCycle() {
+        Configuration.timeout = 20000;
 
         open("https://todomvc4tasj.herokuapp.com/#/");
 
         add("1");
-        editTask("1", "1 edited");
+        edit("1", "1 edited");
         toggle("1 edited");
+        assertTasksAre("1 edited");
 
         filterActive();
-        assertNoVisibleTasksAre();
+        assertNoVisibleTasks();
         add("2");
-        assertVisibleTasksAre("2");
-        toggle("2");
+        toggleAll();
+        assertNoVisibleTasks();
 
         filterCompleted();
-        assertTasksAre("1 edited", "2");
+        assertVisibleTasksAre("1 edited", "2");
         cancelEdit("2", "777");
-        //reopenAll
-        toggleAll();
-        assertNoVisibleTasksAre();
+        assertVisibleTasksAre("1 edited", "2");
+        //reopen
+        toggle("2");
+        clearCompleted();
+        assertNoVisibleTasks();
 
         filterAll();
-        assertTasksAre("1 edited","2");
-        toggle("1 edited");
-        clearCompleted();
         assertTasksAre("2");
         assertItemsLeft(1);
         delete("2");
         assertNoTasksAre();
-
-
     }
 
     ElementsCollection tasks = $$("#todo-list li");
@@ -80,9 +79,18 @@ public class TodoMVCTest {
         tasks.shouldBe(empty);
     }
 
-    private SelenideElement editTask(String oldTaskText, String newTaskText) {
+    private SelenideElement startEdit(String oldTaskText, String newTaskText) {
         tasks.find(exactText(oldTaskText)).doubleClick();
-        return tasks.find(cssClass("editing")).find(".edit").setValue(newTaskText).pressEnter();
+        SelenideElement element = tasks.find(cssClass("editing")).find(".edit").setValue(newTaskText);
+        return element;
+    }
+
+    private void cancelEdit(String oldTaskText, String newTaskText) {
+        startEdit(oldTaskText, newTaskText).pressEscape();
+    }
+
+    private void edit(String oldTaskText, String newTaskText) {
+        startEdit(oldTaskText, newTaskText).pressEnter();
     }
 
     public void filterActive() {
@@ -98,16 +106,12 @@ public class TodoMVCTest {
         $(By.linkText("All")).click();
     }
 
-    private SelenideElement cancelEdit(String taskText, String editText) {
-        tasks.find(exactText(taskText)).doubleClick();
-        return tasks.find(cssClass("editing")).find(".edit").setValue(editText).pressEscape();
+
+    private void assertItemsLeft(Integer count) {
+        $("#todo-count>strong").shouldHave(exactText((count.toString())));
     }
 
-    private void assertItemsLeft(Integer a) {
-        $("#todo-count>strong").shouldHave(exactText((a.toString())));
-    }
-
-    private void assertNoVisibleTasksAre() {
+    private void assertNoVisibleTasks() {
         tasks.filter(visible).shouldBe(empty);
 
     }
