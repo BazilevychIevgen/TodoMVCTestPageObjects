@@ -7,6 +7,9 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.cssClass;
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 /**
@@ -37,6 +40,7 @@ public class TodoMVCTest {
         assertVisibleTasksAre("1 edited", "2");
         //reopen
         toggle("2");
+        assertVisibleTasksAre("1 edited");
         clearCompleted();
         assertNoVisibleTasks();
 
@@ -81,8 +85,8 @@ public class TodoMVCTest {
 
     private SelenideElement startEdit(String oldTaskText, String newTaskText) {
         tasks.find(exactText(oldTaskText)).doubleClick();
-        SelenideElement element = tasks.find(cssClass("editing")).find(".edit").setValue(newTaskText);
-        return element;
+        return tasks.find(cssClass("editing")).find(".edit").setValue(newTaskText);
+
     }
 
     private void cancelEdit(String oldTaskText, String newTaskText) {
@@ -105,7 +109,6 @@ public class TodoMVCTest {
     public void filterAll() {
         $(By.linkText("All")).click();
     }
-
 
     private void assertItemsLeft(Integer count) {
         $("#todo-count>strong").shouldHave(exactText((count.toString())));
