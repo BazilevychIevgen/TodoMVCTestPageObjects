@@ -30,6 +30,7 @@ public class TodoMVCTest {
         filterActive();
         assertNoVisibleTasks();
         add("2");
+        assertVisibleTasksAre("2");
         toggleAll();
         assertNoVisibleTasks();
 
@@ -85,7 +86,6 @@ public class TodoMVCTest {
     private SelenideElement startEdit(String oldTaskText, String newTaskText) {
         tasks.find(exactText(oldTaskText)).doubleClick();
         return tasks.find(cssClass("editing")).find(".edit").setValue(newTaskText);
-
     }
 
     private void cancelEdit(String oldTaskText, String newTaskText) {
@@ -102,7 +102,6 @@ public class TodoMVCTest {
 
     public void filterCompleted() {
         $(By.linkText("Completed")).click();
-
     }
 
     public void filterAll() {
@@ -115,12 +114,10 @@ public class TodoMVCTest {
 
     private void assertNoVisibleTasks() {
         tasks.filter(visible).shouldBe(empty);
-
     }
 
     private void assertVisibleTasksAre(String... taskTexts) {
         tasks.filter(visible).shouldHave(exactTexts(taskTexts));
-
     }
 }
 
