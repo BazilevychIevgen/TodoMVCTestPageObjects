@@ -19,7 +19,6 @@ public class TodoMVCTest {
 
     @Test
     public void testTaskLifeCycle() {
-        Configuration.timeout = 20000;
 
         open("https://todomvc4tasj.herokuapp.com/#/");
 
@@ -48,7 +47,7 @@ public class TodoMVCTest {
         assertTasksAre("2");
         assertItemsLeft(1);
         delete("2");
-        assertNoTasksAre();
+        assertNoTasks();
     }
 
     ElementsCollection tasks = $$("#todo-list li");
@@ -79,7 +78,7 @@ public class TodoMVCTest {
         tasks.shouldHave(exactTexts(taskTexts));
     }
 
-    private void assertNoTasksAre() {
+    private void assertNoTasks() {
         tasks.shouldBe(empty);
     }
 
