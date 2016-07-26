@@ -33,9 +33,8 @@ public class TodoMVCFeatureTest {
     public void testTaskLifeCycle() {
 
         add("1");
-        edit("1", "1 edited");
-        toggle("1 edited");
-        assertTasksAre("1 edited");
+        toggle("1");
+        assertTasksAre("1");
 
         filterActive();
         assertNoVisibleTasks();
@@ -45,40 +44,36 @@ public class TodoMVCFeatureTest {
         assertNoVisibleTasks();
 
         filterCompleted();
-        assertVisibleTasksAre("1 edited", "2");
-        cancelEdit("2", "777");
-        assertVisibleTasksAre("1 edited", "2");
+        assertVisibleTasksAre("1", "2");
         //reopen
         toggle("2");
-        assertVisibleTasksAre("1 edited");
+        assertVisibleTasksAre("1");
         clearCompleted();
         assertNoVisibleTasks();
 
         filterAll();
         assertTasksAre("2");
         assertItemsLeft(1);
-        delete("2");
-        assertNoTasks();
-    }
-    @Test
-    public void editFeatureTest() {
-        //precondition
-        add("1");
-
-        edit("1", "1 edited");
-
-        assertTasksAre("1 edited");
-        assertItemsLeft(1);
     }
 
     @Test
-    public void deleteFetaureTest() {
-        //precondition
+    public void testEditAtAll() {
+        //precondition-added tasks
+        add("1","2");
+
+        edit("1", "1 edited");
+
+        assertTasksAre("1 edited","2");
+        assertItemsLeft(2);
+    }
+
+    @Test
+    public void testDeleteAtActive() {
+        //precondition-edited task
         add("1");
         edit("1", "1 edited");
-        assertTasksAre("1 edited");
         add("2");
-        assertTasksAre("1 edited", "2");
+        filterActive();
 
         delete("1 edited");
 
@@ -87,17 +82,15 @@ public class TodoMVCFeatureTest {
     }
 
     @Test
-    public void cancelEditFeatureTest() {
-        //precondition
-        add("1");
-        toggle("1");
-        assertVisibleTasksAre("1");
+    public void testCancelEditAtCompleted() {
+        //precondition-completed tasks
+        add("1", "2");
+        toggleAll();
         filterCompleted();
-        assertTasksAre("1");
 
         cancelEdit("1", "to be canceled");
 
-        assertTasksAre("1");
+        assertTasksAre("1", "2");
         assertItemsLeft(0);
     }
 
