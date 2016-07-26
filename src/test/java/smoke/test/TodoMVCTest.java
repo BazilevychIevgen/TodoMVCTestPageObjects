@@ -1,4 +1,4 @@
-package ua.net.itlabs;
+package smoke.test;
 
 import com.codeborne.selenide.*;
 import org.junit.Test;
