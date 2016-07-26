@@ -68,12 +68,11 @@ public class TodoMVCFeatureTest {
     }
 
     @Test
-    public void testDeleteAtActive() {
+    public void testDeleteAtAll() {
         //precondition-edited task
         add("1");
         edit("1", "1 edited");
         add("2");
-        filterActive();
 
         delete("1 edited");
 
