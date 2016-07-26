@@ -17,7 +17,7 @@ import static com.codeborne.selenide.Selenide.*;
 /**
  * Created by barocko on 7/25/2016.
  */
-public class TodoMVCFeatureTest {
+public class TodoMVCTest {
 
     @Before
     public void openPage() {
@@ -69,7 +69,7 @@ public class TodoMVCFeatureTest {
 
     @Test
     public void testDeleteAtActive() {
-        //precondition-edited task
+        //precondition-added tasks
         add("1","2");
         filterActive();
 
