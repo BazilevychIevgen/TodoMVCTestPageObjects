@@ -21,7 +21,7 @@ public class TodoMVCFeatureTest {
 
     @Before
     public void openPage() {
-        open("https://todomvc4tasj.herokuapp.com/#/");
+        open("https://todomvc4tasj.herokuapp.com/");
     }
 
     @After
@@ -68,13 +68,12 @@ public class TodoMVCFeatureTest {
     }
 
     @Test
-    public void testDeleteAtAll() {
+    public void testDeleteAtActive() {
         //precondition-edited task
-        add("1");
-        edit("1", "1 edited");
-        add("2");
+        add("1","2");
+        filterActive();
 
-        delete("1 edited");
+        delete("1");
 
         assertTasksAre("2");
         assertItemsLeft(1);
