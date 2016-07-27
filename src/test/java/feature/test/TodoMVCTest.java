@@ -86,7 +86,7 @@ public class TodoMVCTest {
         toggleAll();
         filterCompleted();
 
-        cancelEdit("1", "to be canceled");
+        cancelEdit("2", "to be canceled");
 
         assertTasksAre("1", "2");
         assertItemsLeft(0);
