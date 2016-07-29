@@ -4,6 +4,7 @@ import com.codeborne.selenide.*;
 import com.google.common.io.Files;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import ru.yandex.qatools.allure.annotations.Attachment;
@@ -23,34 +24,11 @@ import static com.codeborne.selenide.Selenide.*;
 /**
  * Created by barocko on 7/25/2016.
  */
-public class TodoMVCTest {
+public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
 
-    @Before
-    public void clearScreenshotList(){
-        Screenshots.screenshots.getScreenshots().clear();
-    }
-
-    @After
-    public void tearDown() throws IOException {
-        File lastSelenideScreenshot = Screenshots.takeScreenShotAsFile();
-        if (lastSelenideScreenshot != null) {
-            screenshot(Files.toByteArray(lastSelenideScreenshot));
-        }
-    }
-
-    @Attachment(type = "image/png")
-    public static byte[] screenshot(byte[] dataForScreenshot) {
-        return dataForScreenshot;
-    }
-
-    @Before
-    public void openPage() {
-        open("https://todomvc4tasj.herokuapp.com/");
-    }
-
-    @After
-    public void clearData() {
-        executeJavaScript("localStorage.clear()");
+    @BeforeClass
+    public static void timeOut(){
+        Configuration.timeout=20000;
     }
 
     @Test
