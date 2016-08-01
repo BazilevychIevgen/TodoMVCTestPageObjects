@@ -27,7 +27,7 @@ import static com.codeborne.selenide.Selenide.*;
 public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
 
     @BeforeClass
-    public static void timeOut(){
+    public static void setTime(){
         Configuration.timeout=20000;
     }
 
