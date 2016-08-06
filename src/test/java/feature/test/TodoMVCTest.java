@@ -97,6 +97,37 @@ public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
         assertTasksAre("a", "b");
     }
 
+    @Test
+    public void testing2() {
+        givenAtActive(new Task("a", COMPLETED), new Task("b", ACTIVE));
+        assertVisibleTasksAre("b");
+
+    }
+
+    @Test
+    public void testing3() {
+        givenAtCompleted(new Task("a", COMPLETED), new Task("b", ACTIVE));
+        assertVisibleTasksAre("a");
+    }
+
+    @Test
+    public void testing4() {
+        givenAtActive(createTask(ACTIVE, "a"), createTask(ACTIVE, "b"));
+        assertTasksAre("a", "b");
+    }
+
+    @Test
+    public void testing5() {
+        given(createTask(ACTIVE, "a"), createTask(ACTIVE, "b"));
+
+    }
+
+    @Test
+    public void testing6() {
+        givenAtCompleted(createTask(ACTIVE, "a"), createTask(COMPLETED, "b"));
+        assertVisibleTasksAre("b");
+
+    }
 
     ElementsCollection tasks = $$("#todo-list li");
 
@@ -195,12 +226,41 @@ public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
         refresh();
     }
 
-    public void givenAtActive(Task... tasks){
-        given(Filter.ACTIVE,tasks);
+    public void givenAtActive(Task... tasks) {
+        given(tasks);
+        filterActive();
     }
 
+    public void givenAtCompleted(Task... tasks) {
+        given(tasks);
+        filterCompleted();
+    }
 
-    public class Task {
+    public static Task[] aTasks(TaskType taskType, String... taskNames) {
+        Task[] tasks = new Task[taskNames.length];
+        for (int i = 0; i < taskNames.length; i++) {
+            tasks[i] = new Task(taskNames[i], taskType);
+        }
+        return tasks;
+    }
+
+    public static Task createTask(TaskType taskType, String taskText) {
+        return new Task(taskText, taskType);
+    }
+
+    public void givenAtActive(TaskType taskType, String taskTexts) {
+        givenAtActive(createTask(taskType, taskTexts));
+    }
+
+    public void givenAtAll(TaskType taskType, String taskTexts) {
+        given(createTask(taskType, taskTexts));
+    }
+
+    public void givenAtCompleted(TaskType taskType, String taskTexts) {
+        givenAtCompleted(createTask(taskType, taskTexts));
+    }
+
+    public static class Task {
         private String taskText;
         private TaskType taskType;
 
@@ -209,25 +269,10 @@ public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
             this.taskType = taskType;
         }
 
-
         @Override
         public String toString() {
             return "{" + taskType + ",'title':'" + taskText + "'}";
         }
-    }
-
-    public enum Filter {
-        ACTIVE("/#/all"), COMPLETED("/#/completed"), ALL("/#");
-
-        String s;
-
-        Filter(String s) {
-            this.s = s;
-        }
-        public String link() {
-            return "https://todomvc4tasj.herokuapp.com" + s;
-        }
-
     }
 
     public enum TaskType {
@@ -246,4 +291,17 @@ public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
         }
     }
 
+//    public enum Filter {
+//        ACTIVE("/#/all"), COMPLETED("/#/completed"), ALL("/#");
+//
+//        String s;
+//
+//        Filter(String s) {
+//            this.s = s;
+//        }
+//        public String link() {
+//            return "https://todomvc4tasj.herokuapp.com" + s;
+//        }
+//
+//    }
 }
