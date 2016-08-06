@@ -1,25 +1,23 @@
 package feature.test;
 
 import com.codeborne.selenide.*;
-import com.google.common.io.Files;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import ru.yandex.qatools.allure.annotations.Attachment;
 import ru.yandex.qatools.allure.annotations.Step;
 
-import java.io.File;
-import java.io.IOException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
-import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
+import static feature.test.TodoMVCTest.TaskType.ACTIVE;
+import static feature.test.TodoMVCTest.TaskType.COMPLETED;
 
 /**
  * Created by barocko on 7/25/2016.
@@ -27,8 +25,8 @@ import static com.codeborne.selenide.Selenide.*;
 public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
 
     @BeforeClass
-    public static void setTime(){
-        Configuration.timeout=20000;
+    public static void setTime() {
+        Configuration.timeout = 20000;
     }
 
     @Test
@@ -83,7 +81,6 @@ public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
 
     @Test
     public void testCancelEditAtCompleted() {
-        //precondition-completed tasks
         add("1", "2");
         toggleAll();
         filterCompleted();
@@ -93,6 +90,13 @@ public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
         assertTasksAre("1", "2");
         assertItemsLeft(0);
     }
+
+    @Test
+    public void testing() {
+        given(new Task("a", COMPLETED), new Task("b", ACTIVE));
+        assertTasksAre("a", "b");
+    }
+
 
     ElementsCollection tasks = $$("#todo-list li");
 
@@ -178,7 +182,68 @@ public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
     private void assertVisibleTasksAre(String... taskTexts) {
         tasks.filter(visible).shouldHave(exactTexts(taskTexts));
     }
+
+
+    @Step
+    public void given(Task... tasks) {
+        List<String> taskList = new ArrayList<>();
+        for (Task task : tasks) {
+            taskList.add("{" + task.taskType + ",\\\"title\\\":\\\"" + task.taskText + "\\\"}");
+        }
+        executeJavaScript("localStorage.setItem(\"todos-troopjs\",\"[" + String.join(",", taskList) + "]\")");
+        System.out.println("localStorage.setItem(\"todos-troopjs\",\"[" + String.join(",", taskList) + "]\")");
+        refresh();
+    }
+
+    public void givenAtActive(Task... tasks){
+        given(Filter.ACTIVE,tasks);
+    }
+
+
+    public class Task {
+        private String taskText;
+        private TaskType taskType;
+
+        public Task(String taskText, TaskType taskType) {
+            this.taskText = taskText;
+            this.taskType = taskType;
+        }
+
+
+        @Override
+        public String toString() {
+            return "{" + taskType + ",'title':'" + taskText + "'}";
+        }
+    }
+
+    public enum Filter {
+        ACTIVE("/#/all"), COMPLETED("/#/completed"), ALL("/#");
+
+        String s;
+
+        Filter(String s) {
+            this.s = s;
+        }
+        public String link() {
+            return "https://todomvc4tasj.herokuapp.com" + s;
+        }
+
+    }
+
+    public enum TaskType {
+        ACTIVE("\\\"completed\\\":false"), COMPLETED("\\\"completed\\\":true");
+
+        private String taskStatus;
+
+        @Override
+        public String toString() {
+            return taskStatus;
+
+        }
+
+        TaskType(String taskStatus) {
+            this.taskStatus = taskStatus;
+        }
+    }
+
 }
-
-
-
