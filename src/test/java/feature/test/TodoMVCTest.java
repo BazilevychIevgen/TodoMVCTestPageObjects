@@ -22,15 +22,17 @@ import static feature.test.TodoMVCTest.TaskType.COMPLETED;
 /**
  * Created by barocko on 7/25/2016.
  */
-public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
+public class TodoMVCTest extends BaseTest {
 
     @BeforeClass
-    public static void setTime() {
+    public static void setTimeout() {
         Configuration.timeout = 20000;
     }
 
+
     @Test
     public void testTaskLifeCycle() {
+        given();
 
         add("1");
         toggle("1");
@@ -59,6 +61,8 @@ public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
     @Test
     public void testEditAtAll() {
         //precondition-added tasks
+        given();
+
         add("1", "2");
 
         edit("1", "1 edited");
@@ -68,19 +72,9 @@ public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
     }
 
     @Test
-    public void testDeleteAtActive() {
-        //precondition-added tasks
-        add("1", "2");
-        filterActive();
-
-        delete("1");
-
-        assertTasksAre("2");
-        assertItemsLeft(1);
-    }
-
-    @Test
     public void testCancelEditAtCompleted() {
+        given();
+
         add("1", "2");
         toggleAll();
         filterCompleted();
@@ -92,41 +86,163 @@ public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
     }
 
     @Test
-    public void testing() {
-        given(new Task("a", COMPLETED), new Task("b", ACTIVE));
-        assertTasksAre("a", "b");
+    public void testDeleteAtActive() {
+        //precondition-added tasks
+        given();
+
+        add("1", "2");
+        filterActive();
+
+        delete("1");
+
+        assertTasksAre("2");
+        assertItemsLeft(1);
     }
 
     @Test
-    public void testing2() {
-        givenAtActive(new Task("a", COMPLETED), new Task("b", ACTIVE));
-        assertVisibleTasksAre("b");
+    public void deleteAtAll() {
+        givenAtAll(COMPLETED, "1");
 
+        delete("1");
+
+        assertNoTasks();
     }
 
     @Test
-    public void testing3() {
-        givenAtCompleted(new Task("a", COMPLETED), new Task("b", ACTIVE));
-        assertVisibleTasksAre("a");
+    public void testClearCompletedAtAll() {
+        givenAtAll(COMPLETED, "2");
+
+        clearCompleted();
+
+        assertNoTasks();
     }
 
     @Test
-    public void testing4() {
-        givenAtActive(createTask(ACTIVE, "a"), createTask(ACTIVE, "b"));
-        assertTasksAre("a", "b");
+    public void testSwitchFilterToCompletedAtAll() {
+        given(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+
+        filterCompleted();
+
+        assertVisibleTasksAre("1");
     }
 
     @Test
-    public void testing5() {
-        given(createTask(ACTIVE, "a"), createTask(ACTIVE, "b"));
+    public void testCanceleditAtAll() {
+        givenAtAll(ACTIVE, "1");
 
+        cancelEdit("1", "1 editing");
+
+        assertTasksAre("1");
+        assertItemsLeft(1);
     }
 
     @Test
-    public void testing6() {
-        givenAtCompleted(createTask(ACTIVE, "a"), createTask(COMPLETED, "b"));
-        assertVisibleTasksAre("b");
+    public void testConfirmEditByPressTabAtAll() {
+        givenAtAll(COMPLETED, "1");
 
+        confirmEditByPressTab("1", "1 edited");
+
+        assertTasksAre("1 edited");
+        assertItemsLeft(0);
+    }
+
+    @Test
+    public void testCompleteAtCtive() {
+        givenAtActive(ACTIVE, "1", "2");
+
+        toggle("2");
+
+        assertVisibleTasksAre("1");
+        assertItemsLeft(1);
+    }
+
+    @Test
+    public void testEditAtActive() {
+        givenAtActive(ACTIVE, "1", "2");
+
+        edit("2", "2 edited");
+
+        assertTasksAre("1", "2 edited");
+    }
+
+    @Test
+    public void testDeleteByemptyingTextAtActive() {
+        givenAtActive(ACTIVE, "1", "2");
+
+        edit("2", "");
+
+        assertTasksAre("1");
+        assertItemsLeft(1);
+    }
+
+    @Test
+    public void testSwitchFilterToAllAtActive() {
+        givenAtActive(ACTIVE, "1", "2");
+        toggle("2");
+
+        filterAll();
+
+        assertTasksAre("1", "2");
+        assertItemsLeft(1);
+    }
+
+    @Test
+    public void testCancelEditByPressEscapeAtActive() {
+        givenAtActive(ACTIVE, "1", "2");
+
+        cancelEdit("2", "2 edited");
+
+        assertTasksAre("1", "2");
+        assertItemsLeft(2);
+    }
+
+    @Test
+    public void testEditAtCompleted() {
+        givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+
+        edit("1", "1 edited");
+
+        assertVisibleTasksAre("1 edited");
+        assertItemsLeft(1);
+    }
+
+    @Test
+    public void testConifrmEditByClickOutsideAtCompleted() {
+        givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+
+        confirmEditByClickingOutside("1", "1 edited");
+
+        assertVisibleTasksAre("1 edited");
+    }
+
+    @Test
+    public void testDeleteAtCompleted() {
+        givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+
+        delete("1");
+
+        assertNoVisibleTasks();
+        assertItemsLeft(1);
+    }
+
+    @Test
+    public void testSwitchToActiveFilterAtCompleted() {
+        givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+
+        filterActive();
+
+        assertVisibleTasksAre("2");
+        assertItemsLeft(1);
+    }
+
+    @Test
+    public void testReopenAllAtCompleted() {
+        givenAtCompleted(COMPLETED, "1", "2");
+
+        toggleAll();
+
+        assertNoVisibleTasks();
+        assertItemsLeft(2);
     }
 
     ElementsCollection tasks = $$("#todo-list li");
@@ -143,86 +259,90 @@ public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
         }
     }
 
-    @Step
+
     private void delete(String taskText) {
         tasks.find(exactText(taskText)).hover().$(".destroy").click();
     }
 
-    @Step
     private void toggle(String taskText) {
         tasks.find(exactText(taskText)).$(".toggle").click();
     }
 
-    @Step
     private void toggleAll() {
         $("#toggle-all").click();
     }
 
-    @Step
     private void assertTasksAre(String... taskTexts) {
         tasks.shouldHave(exactTexts(taskTexts));
     }
 
-    @Step
     private void assertNoTasks() {
         tasks.shouldBe(empty);
     }
 
-    @Step
     private SelenideElement startEdit(String oldTaskText, String newTaskText) {
         tasks.find(exactText(oldTaskText)).doubleClick();
         return tasks.find(cssClass("editing")).find(".edit").setValue(newTaskText);
     }
 
-    @Step
     private void cancelEdit(String oldTaskText, String newTaskText) {
         startEdit(oldTaskText, newTaskText).pressEscape();
     }
 
-    @Step
+    public void confirmEditByPressTab(String oldTaskText, String newTaskText) {
+        startEdit(oldTaskText, newTaskText).pressTab();
+    }
+
+    public void confirmEditByClickingOutside(String oldTaskText, String newTaskText) {
+        startEdit(oldTaskText, newTaskText);
+        $("#header>h1").click();
+    }
+
     private void edit(String oldTaskText, String newTaskText) {
         startEdit(oldTaskText, newTaskText).pressEnter();
     }
 
-    @Step
     private void filterActive() {
         $(By.linkText("Active")).click();
     }
 
-    @Step
     private void filterCompleted() {
         $(By.linkText("Completed")).click();
     }
 
-    @Step
     private void filterAll() {
         $(By.linkText("All")).click();
     }
 
-    @Step
     private void assertItemsLeft(Integer count) {
         $("#todo-count>strong").shouldHave(exactText((count.toString())));
     }
 
-    @Step
     private void assertNoVisibleTasks() {
         tasks.filter(visible).shouldBe(empty);
     }
 
-    @Step
     private void assertVisibleTasksAre(String... taskTexts) {
         tasks.filter(visible).shouldHave(exactTexts(taskTexts));
     }
 
+    public String url() {
+        return "url";
+    }
 
-    @Step
+    public void ensureApplsOpened() {
+        if (!(url().equals("https://todomvc4tasj.herokuapp.com"))) {
+            open("https://todomvc4tasj.herokuapp.com");
+        }
+    }
+
     public void given(Task... tasks) {
+        ensureApplsOpened();
         List<String> taskList = new ArrayList<>();
         for (Task task : tasks) {
             taskList.add("{" + task.taskType + ",\\\"title\\\":\\\"" + task.taskText + "\\\"}");
         }
         executeJavaScript("localStorage.setItem(\"todos-troopjs\",\"[" + String.join(",", taskList) + "]\")");
-        System.out.println("localStorage.setItem(\"todos-troopjs\",\"[" + String.join(",", taskList) + "]\")");
         refresh();
     }
 
@@ -239,32 +359,32 @@ public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
     public static Task[] aTasks(TaskType taskType, String... taskNames) {
         Task[] tasks = new Task[taskNames.length];
         for (int i = 0; i < taskNames.length; i++) {
-            tasks[i] = new Task(taskNames[i], taskType);
+            tasks[i] = new Task(taskType, taskNames[i]);
         }
         return tasks;
     }
 
-    public static Task createTask(TaskType taskType, String taskText) {
-        return new Task(taskText, taskType);
+    public static Task aTask(TaskType taskType, String taskText) {
+        return new Task(taskType, taskText);
     }
 
-    public void givenAtActive(TaskType taskType, String taskTexts) {
-        givenAtActive(createTask(taskType, taskTexts));
+    public void givenAtActive(TaskType taskType, String... taskNames) {
+        givenAtActive(aTasks(taskType, taskNames));
     }
 
-    public void givenAtAll(TaskType taskType, String taskTexts) {
-        given(createTask(taskType, taskTexts));
+    public void givenAtAll(TaskType taskType, String... taskNames) {
+        given(aTasks(taskType, taskNames));
     }
 
-    public void givenAtCompleted(TaskType taskType, String taskTexts) {
-        givenAtCompleted(createTask(taskType, taskTexts));
+    public void givenAtCompleted(TaskType taskType, String... taskNames) {
+        givenAtCompleted(aTasks(taskType, taskNames));
     }
 
     public static class Task {
         private String taskText;
         private TaskType taskType;
 
-        public Task(String taskText, TaskType taskType) {
+        public Task(TaskType taskType, String taskText) {
             this.taskText = taskText;
             this.taskType = taskType;
         }
@@ -289,6 +409,8 @@ public class TodoMVCTest extends AtTodoMVCPasgeWithClearedDataAfterEachTest {
         TaskType(String taskStatus) {
             this.taskStatus = taskStatus;
         }
+
+
     }
 
 //    public enum Filter {
