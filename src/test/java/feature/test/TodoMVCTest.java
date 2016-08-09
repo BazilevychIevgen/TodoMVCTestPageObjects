@@ -270,7 +270,7 @@ public class TodoMVCTest extends BaseTest {
 
     ElementsCollection tasks = $$("#todo-list li");
 
-    public SelenideElement ELEMENT = $("#new-todo");
+    public SelenideElement element = $("#new-todo");
 
     @Step
     private void clearCompleted() {
@@ -280,7 +280,7 @@ public class TodoMVCTest extends BaseTest {
     @Step
     private void add(String... taskTexts) {
         for (String text : taskTexts) {
-            ELEMENT.setValue(text).pressEnter();
+            element.setValue(text).pressEnter();
         }
     }
 
@@ -320,7 +320,7 @@ public class TodoMVCTest extends BaseTest {
 
     public void confirmEditByClickOutside(String oldTaskText, String newTaskText) {
         startEdit(oldTaskText, newTaskText);
-        ELEMENT.click();
+        element.click();
     }
 
     private void edit(String oldTaskText, String newTaskText) {
