@@ -105,7 +105,7 @@ public class TodoMVCTest extends BaseTest {
 
         clearCompleted();
 
-        assertNoTasks();
+        assertNoVisibleTasks();
         assertItemsLeft(1);
     }
 
