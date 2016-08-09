@@ -70,19 +70,37 @@ public class TodoMVCTest extends BaseTest {
     }
 
     @Test
-    public void testCancelEditAtCompleted() {
-        givenAtCompleted(COMPLETED, "1", "2");
+    public void testEditAtActive() {
+        givenAtActive(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
 
+        edit("2", "2 edited");
 
-        cancelEdit("2", "to be canceled");
+        assertVisibleTasksAre("2 edited");
+        assertItemsLeft(1);
+    }
 
-        assertTasksAre("1", "2");
-        assertItemsLeft(0);
+    @Test
+    public void testEditAtCompleted() {
+        givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+
+        edit("1", "1 edited");
+
+        assertVisibleTasksAre("1 edited");
+        assertItemsLeft(1);
+    }
+
+    @Test
+    public void testDeleteAtAll() {
+        givenAtAll(COMPLETED, "1");
+
+        delete("1");
+
+        assertNoTasks();
     }
 
     @Test
     public void testDeleteAtActive() {
-        givenAtActive(ACTIVE,"1","2");
+        givenAtActive(ACTIVE, "1", "2");
 
         delete("2");
 
@@ -91,12 +109,33 @@ public class TodoMVCTest extends BaseTest {
     }
 
     @Test
-    public void deleteAtAll() {
-        givenAtAll(COMPLETED, "1");
+    public void testDeleteAtCompleted() {
+        givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
 
         delete("1");
 
-        assertNoTasks();
+        assertNoVisibleTasks();
+        assertItemsLeft(1);
+    }
+
+    @Test
+    public void testCompleteAtActive() {
+        givenAtActive(ACTIVE, "1", "2");
+
+        toggle("2");
+
+        assertVisibleTasksAre("1");
+        assertItemsLeft(1);
+    }
+
+    @Test
+    public void testCompleteAllAtAll() {
+        givenAtAll(ACTIVE, "1", "2");
+
+        toggleAll();
+
+        assertTasksAre("1", "2");
+        assertItemsLeft(0);
     }
 
     @Test
@@ -120,6 +159,26 @@ public class TodoMVCTest extends BaseTest {
     }
 
     @Test
+    public void testSwitchFilterToAllAtActive() {
+        givenAtActive(aTask(ACTIVE, "1"), aTask(COMPLETED, "2"));
+
+        filterAll();
+
+        assertTasksAre("1", "2");
+        assertItemsLeft(1);
+    }
+
+    @Test
+    public void testSwitchToActiveFilterAtCompleted() {
+        givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+
+        filterActive();
+
+        assertVisibleTasksAre("2");
+        assertItemsLeft(1);
+    }
+
+    @Test
     public void testCancelEditAtAll() {
         givenAtAll(ACTIVE, "1");
 
@@ -127,16 +186,6 @@ public class TodoMVCTest extends BaseTest {
 
         assertTasksAre("1");
         assertItemsLeft(1);
-    }
-
-    @Test
-    public void testCompleteAllAtAll() {
-        givenAtAll(ACTIVE, "1", "2");
-
-        toggleAll();
-
-        assertTasksAre("1", "2");
-        assertItemsLeft(0);
     }
 
     @Test
@@ -160,26 +209,6 @@ public class TodoMVCTest extends BaseTest {
     }
 
     @Test
-    public void testCompleteAtActive() {
-        givenAtActive(ACTIVE, "1", "2");
-
-        toggle("2");
-
-        assertVisibleTasksAre("1");
-        assertItemsLeft(1);
-    }
-
-    @Test
-    public void testEditAtActive() {
-        givenAtActive(ACTIVE, "1", "2");
-
-        edit("2", "2 edited");
-
-        assertTasksAre("1", "2 edited");
-        assertItemsLeft(2);
-    }
-
-    @Test
     public void testDeleteByEmptyingTextAtActive() {
         givenAtActive(ACTIVE, "1", "2");
 
@@ -200,16 +229,6 @@ public class TodoMVCTest extends BaseTest {
     }
 
     @Test
-    public void testSwitchFilterToAllAtActive() {
-        givenAtActive(aTask(ACTIVE, "1"), aTask(COMPLETED, "2"));
-
-        filterAll();
-
-        assertTasksAre("1", "2");
-        assertItemsLeft(1);
-    }
-
-    @Test
     public void testCancelEditAtActive() {
         givenAtActive(ACTIVE, "1", "2");
 
@@ -220,12 +239,12 @@ public class TodoMVCTest extends BaseTest {
     }
 
     @Test
-    public void testEditAtCompleted() {
-        givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+    public void testCancelEditAtCompleted() {
+        givenAtCompleted(aTask(ACTIVE, "1"), aTask(COMPLETED, "2"));
 
-        edit("1", "1 edited");
+        cancelEdit("2", "to be canceled");
 
-        assertVisibleTasksAre("1 edited");
+        assertVisibleTasksAre("2");
         assertItemsLeft(1);
     }
 
@@ -240,26 +259,6 @@ public class TodoMVCTest extends BaseTest {
     }
 
     @Test
-    public void testDeleteAtCompleted() {
-        givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
-
-        delete("1");
-
-        assertNoVisibleTasks();
-        assertItemsLeft(1);
-    }
-
-    @Test
-    public void testSwitchToActiveFilterAtCompleted() {
-        givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
-
-        filterActive();
-
-        assertVisibleTasksAre("2");
-        assertItemsLeft(1);
-    }
-
-    @Test
     public void testReopenAllAtCompleted() {
         givenAtCompleted(COMPLETED, "1", "2");
 
@@ -270,6 +269,8 @@ public class TodoMVCTest extends BaseTest {
     }
 
     ElementsCollection tasks = $$("#todo-list li");
+
+    public SelenideElement ELEMENT = $("#new-todo");
 
     @Step
     private void clearCompleted() {
@@ -321,8 +322,6 @@ public class TodoMVCTest extends BaseTest {
         startEdit(oldTaskText, newTaskText);
         ELEMENT.click();
     }
-
-    public final SelenideElement ELEMENT = $("#new-todo");
 
     private void edit(String oldTaskText, String newTaskText) {
         startEdit(oldTaskText, newTaskText).pressEnter();
@@ -390,16 +389,16 @@ public class TodoMVCTest extends BaseTest {
         return new Task(taskType, taskText);
     }
 
-    public void givenAtActive(TaskType taskType, String... taskNames) {
-        givenAtActive(aTasks(taskType, taskNames));
+    public void givenAtActive(TaskType taskType, String... taskText) {
+        givenAtActive(aTasks(taskType, taskText));
     }
 
-    public void givenAtAll(TaskType taskType, String... taskNames) {
-        given(aTasks(taskType, taskNames));
+    public void givenAtAll(TaskType taskType, String... taskText) {
+        given(aTasks(taskType, taskText));
     }
 
-    public void givenAtCompleted(TaskType taskType, String... taskNames) {
-        givenAtCompleted(aTasks(taskType, taskNames));
+    public void givenAtCompleted(TaskType taskType, String... taskText) {
+        givenAtCompleted(aTasks(taskType, taskText));
     }
 
     public static class Task {
