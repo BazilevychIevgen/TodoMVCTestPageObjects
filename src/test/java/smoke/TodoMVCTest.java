@@ -1,4 +1,4 @@
-package smoke.test;
+package smoke;
 
 import com.codeborne.selenide.*;
 import com.google.common.io.Files;

@@ -1,4 +1,4 @@
-package feature.test.pages;
+package feature.pages;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -20,7 +20,7 @@ import static com.codeborne.selenide.WebDriverRunner.url;
 /**
  * Created by barocko on 8/10/2016.
  */
-public class TodoMVCPage {
+public class TodoMVCPageTest {
 
     public ElementsCollection tasks = $$("#todo-list li");
 

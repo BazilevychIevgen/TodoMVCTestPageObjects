@@ -1,10 +1,10 @@
-package feature.test;
+package feature;
 
-import feature.test.pages.TodoMVCPage;
+import feature.pages.TodoMVCPage;
 import org.junit.Test;
 
-import static feature.test.pages.TodoMVCPage.TaskType.ACTIVE;
-import static feature.test.pages.TodoMVCPage.TaskType.COMPLETED;
+import static feature.pages.TodoMVCPage.TaskType.ACTIVE;
+import static feature.pages.TodoMVCPage.TaskType.COMPLETED;
 
 
 /**

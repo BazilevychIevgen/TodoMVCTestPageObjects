@@ -1,16 +1,16 @@
-package feature.test;
+package feature;
 
-import feature.test.pages.TodoMVCPage;
+import feature.pages.TodoMVCPage;
 import org.junit.Test;
 
-import static feature.test.pages.TodoMVCPage.TaskType.ACTIVE;
-import static feature.test.pages.TodoMVCPage.TaskType.COMPLETED;
+import static feature.pages.TodoMVCPage.TaskType.ACTIVE;
+import static feature.pages.TodoMVCPage.TaskType.COMPLETED;
 
 
 /**
  * Created by barocko on 8/10/2016.
  */
-public class TodoMVCTestAtCompleted extends BaseTest {
+public class TodoMVCTestAtCompletedTest extends BaseTest {
 
     TodoMVCPage page = new TodoMVCPage();
 

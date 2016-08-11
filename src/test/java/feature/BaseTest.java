@@ -1,4 +1,4 @@
-package feature.test;
+package feature;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Screenshots;
