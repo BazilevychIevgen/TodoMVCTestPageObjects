@@ -1,7 +1,7 @@
 package feature;
 
-import feature.pages.TodoMVCPage;
-import feature.pages.TodoMVCPage;
+import feature.pages.TodoMvcPage;
+import feature.pages.TodoMvcPage;
 import org.junit.Test;
 
 
@@ -10,7 +10,7 @@ import org.junit.Test;
  */
 public class TodoMVCTestLifeCycleTest extends BaseTest {
 
-    TodoMVCPage page = new TodoMVCPage();
+    TodoMvcPage page = new TodoMvcPage();
 
     @Test
     public void testTaskLifeCycle() {
