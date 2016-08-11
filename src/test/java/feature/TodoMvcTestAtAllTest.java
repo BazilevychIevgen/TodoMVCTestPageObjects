@@ -1,11 +1,11 @@
 package feature;
 
-import feature.pages.TodoMvcPage2;
+import feature.pages.TodoMvcPage;
 import org.junit.Test;
 
 
-import static feature.pages.TodoMvcPage2.TaskType.ACTIVE;
-import static feature.pages.TodoMvcPage2.TaskType.COMPLETED;
+import static feature.pages.TodoMvcPage.TaskType.ACTIVE;
+import static feature.pages.TodoMvcPage.TaskType.COMPLETED;
 
 
 /**
@@ -13,7 +13,7 @@ import static feature.pages.TodoMvcPage2.TaskType.COMPLETED;
  */
 public class TodoMvcTestAtAllTest extends BaseTest {
 
-    TodoMvcPage2 page = new TodoMvcPage2();
+    TodoMvcPage page = new TodoMvcPage();
 
 
     @Test
