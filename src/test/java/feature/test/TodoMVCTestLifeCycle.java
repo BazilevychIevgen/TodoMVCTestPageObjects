@@ -20,7 +20,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.url;
 import static feature.test.pages.TodoMVCPage.TaskType.ACTIVE;
 import static feature.test.pages.TodoMVCPage.TaskType.COMPLETED;
-import static feature.test.pages.TodoMVCPage.aTask;
+
 
 /**
  * Created by barocko on 7/25/2016.
@@ -28,11 +28,6 @@ import static feature.test.pages.TodoMVCPage.aTask;
 public class TodoMVCTestLifeCycle extends BaseTest {
 
     TodoMVCPage page = new TodoMVCPage();
-
-    @BeforeClass
-    public static void setTimeout() {
-        Configuration.timeout = 20000;
-    }
 
     @Test
     public void testTaskLifeCycle() {

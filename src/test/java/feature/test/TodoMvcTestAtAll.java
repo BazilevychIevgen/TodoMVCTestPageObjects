@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static feature.test.pages.TodoMVCPage.TaskType.ACTIVE;
 import static feature.test.pages.TodoMVCPage.TaskType.COMPLETED;
-import static feature.test.pages.TodoMVCPage.aTask;
+
 
 /**
  * Created by barocko on 8/10/2016.
@@ -16,7 +16,7 @@ public class TodoMvcTestAtAll extends BaseTest {
 
 
     @Test
-    public void testEditAtAll() {
+    public void testEdit() {
         page.givenAtAll(ACTIVE, "1", "2");
 
         page.edit("1", "1 edited");
@@ -26,7 +26,7 @@ public class TodoMvcTestAtAll extends BaseTest {
     }
 
     @Test
-    public void testDeleteAtAll() {
+    public void testDelete() {
         page.givenAtAll(COMPLETED, "1");
 
         page.delete("1");
@@ -35,7 +35,7 @@ public class TodoMvcTestAtAll extends BaseTest {
     }
 
     @Test
-    public void testCompleteAllAtAll() {
+    public void testCompleteAll() {
         page.givenAtAll(ACTIVE, "1", "2");
 
         page.toggleAll();
@@ -45,8 +45,8 @@ public class TodoMvcTestAtAll extends BaseTest {
     }
 
     @Test
-    public void testClearCompletedAtAll() {
-        page.given(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+    public void testClearCompleted() {
+        page.given(page.aTask(COMPLETED, "1"), page.aTask(ACTIVE, "2"));
 
         page.clearCompleted();
 
@@ -55,8 +55,8 @@ public class TodoMvcTestAtAll extends BaseTest {
     }
 
     @Test
-    public void testSwitchFilterToCompletedAtAll() {
-        page.given(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+    public void testSwitchFilterToCompleted() {
+        page.given(page.aTask(COMPLETED, "1"), page.aTask(ACTIVE, "2"));
 
         page.filterCompleted();
 
@@ -65,7 +65,7 @@ public class TodoMvcTestAtAll extends BaseTest {
     }
 
     @Test
-    public void testCancelEditAtAll() {
+    public void testCancelEdit() {
         page.givenAtAll(ACTIVE, "1");
 
         page.cancelEdit("1", "1 editing");
@@ -75,7 +75,7 @@ public class TodoMvcTestAtAll extends BaseTest {
     }
 
     @Test
-    public void testReopenAtAll() {
+    public void testReopen() {
         page.givenAtAll(COMPLETED, "1");
 
         page.toggle("1");
@@ -85,7 +85,7 @@ public class TodoMvcTestAtAll extends BaseTest {
     }
 
     @Test
-    public void testConfirmEditByPressTabAtAll() {
+    public void testConfirmEditByPressTab() {
         page.givenAtAll(COMPLETED, "1");
 
         page.confirmEditByPressTab("1", "1 edited");

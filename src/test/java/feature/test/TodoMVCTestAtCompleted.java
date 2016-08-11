@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static feature.test.pages.TodoMVCPage.TaskType.ACTIVE;
 import static feature.test.pages.TodoMVCPage.TaskType.COMPLETED;
-import static feature.test.pages.TodoMVCPage.aTask;
+
 
 /**
  * Created by barocko on 8/10/2016.
@@ -15,8 +15,8 @@ public class TodoMVCTestAtCompleted extends BaseTest {
     TodoMVCPage page = new TodoMVCPage();
 
     @Test
-    public void testEditAtCompleted() {
-        page.givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+    public void testEdit() {
+        page.givenAtCompleted(page.aTask(COMPLETED, "1"), page.aTask(ACTIVE, "2"));
 
         page.edit("1", "1 edited");
 
@@ -25,8 +25,8 @@ public class TodoMVCTestAtCompleted extends BaseTest {
     }
 
     @Test
-    public void testDeleteAtCompleted() {
-        page.givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+    public void testDelete() {
+        page.givenAtCompleted(page.aTask(COMPLETED, "1"), page.aTask(ACTIVE, "2"));
 
         page.delete("1");
 
@@ -35,8 +35,8 @@ public class TodoMVCTestAtCompleted extends BaseTest {
     }
 
     @Test
-    public void testSwitchToActiveFilterAtCompleted() {
-        page.givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+    public void testSwitchToActiveFilter() {
+        page.givenAtCompleted(page.aTask(COMPLETED, "1"), page.aTask(ACTIVE, "2"));
 
         page.filterActive();
 
@@ -45,8 +45,8 @@ public class TodoMVCTestAtCompleted extends BaseTest {
     }
 
     @Test
-    public void testCancelEditAtCompleted() {
-        page.givenAtCompleted(aTask(ACTIVE, "1"), aTask(COMPLETED, "2"));
+    public void testCancelEdit() {
+        page.givenAtCompleted(page.aTask(ACTIVE, "1"), page.aTask(COMPLETED, "2"));
 
         page.cancelEdit("2", "to be canceled");
 
@@ -55,8 +55,8 @@ public class TodoMVCTestAtCompleted extends BaseTest {
     }
 
     @Test
-    public void testConfirmEditByClickOutsideAtCompleted() {
-        page.givenAtCompleted(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+    public void testConfirmEditByClickOutside() {
+        page.givenAtCompleted(page.aTask(COMPLETED, "1"), page.aTask(ACTIVE, "2"));
 
         page.confirmEditByClickOutside("1", "1 edited");
 
@@ -65,7 +65,7 @@ public class TodoMVCTestAtCompleted extends BaseTest {
     }
 
     @Test
-    public void testReopenAllAtCompleted() {
+    public void testReopenAll() {
         page.givenAtCompleted(COMPLETED, "1", "2");
 
         page.toggleAll();

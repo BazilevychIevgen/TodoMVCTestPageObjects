@@ -131,7 +131,7 @@ public class TodoMVCPage {
         filterCompleted();
     }
 
-    public static Task[] aTasks(TaskType taskType, String... taskText) {
+    public  Task[] aTasks(TaskType taskType, String... taskText) {
         Task[] tasks = new Task[taskText.length];
         for (int i = 0; i < taskText.length; i++) {
             tasks[i] = new Task(taskType, taskText[i]);
@@ -139,7 +139,7 @@ public class TodoMVCPage {
         return tasks;
     }
 
-    public static Task aTask(TaskType taskType, String taskText) {
+    public   Task aTask(TaskType taskType, String taskText) {
         return new Task(taskType, taskText);
     }
 
@@ -155,7 +155,7 @@ public class TodoMVCPage {
         givenAtCompleted(aTasks(taskType, taskText));
     }
 
-    public static class Task {
+    public   class Task {
         public String taskText;
         public TaskType taskType;
 

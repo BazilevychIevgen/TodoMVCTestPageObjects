@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static feature.test.pages.TodoMVCPage.TaskType.ACTIVE;
 import static feature.test.pages.TodoMVCPage.TaskType.COMPLETED;
-import static feature.test.pages.TodoMVCPage.aTask;
+
 
 /**
  * Created by barocko on 8/10/2016.
@@ -15,8 +15,8 @@ public class TodoMVCTestAtActive extends BaseTest {
     TodoMVCPage page=new TodoMVCPage();
 
     @Test
-    public void testEditAtActive() {
-        page.givenAtActive(aTask(COMPLETED, "1"), aTask(ACTIVE, "2"));
+    public void testEdit() {
+        page.givenAtActive(page.aTask(COMPLETED, "1"), page.aTask(ACTIVE, "2"));
 
         page.edit("2", "2 edited");
 
@@ -25,7 +25,7 @@ public class TodoMVCTestAtActive extends BaseTest {
     }
 
     @Test
-    public void testDeleteAtActive() {
+    public void testDelete() {
         page.givenAtActive(ACTIVE, "1", "2");
 
         page.delete("2");
@@ -35,8 +35,8 @@ public class TodoMVCTestAtActive extends BaseTest {
     }
 
     @Test
-    public void testSwitchFilterToAllAtActive() {
-        page.givenAtActive(aTask(ACTIVE, "1"), aTask(COMPLETED, "2"));
+    public void testSwitchFilterToAll() {
+        page.givenAtActive(page.aTask(ACTIVE, "1"), page.aTask(COMPLETED, "2"));
 
         page.filterAll();
 
@@ -45,7 +45,7 @@ public class TodoMVCTestAtActive extends BaseTest {
     }
 
     @Test
-    public void testDeleteByEmptyingTextAtActive() {
+    public void testDeleteByEmptyingText() {
         page.givenAtActive(ACTIVE, "1", "2");
 
         page.edit("2", "");
@@ -55,8 +55,8 @@ public class TodoMVCTestAtActive extends BaseTest {
     }
 
     @Test
-    public void testClearCompletedAtActive() {
-        page.givenAtActive(aTask(ACTIVE, "1"), aTask(COMPLETED, "2"));
+    public void testClearCompleted() {
+        page.givenAtActive(page.aTask(ACTIVE, "1"), page.aTask(COMPLETED, "2"));
 
         page.clearCompleted();
 
@@ -65,7 +65,7 @@ public class TodoMVCTestAtActive extends BaseTest {
     }
 
     @Test
-    public void testCancelEditAtActive() {
+    public void testCancelEdit() {
         page.givenAtActive(ACTIVE, "1", "2");
 
         page.cancelEdit("2", "2 edited");
@@ -75,7 +75,7 @@ public class TodoMVCTestAtActive extends BaseTest {
     }
 
     @Test
-    public void testCompleteAtActive() {
+    public void testComplete() {
         page.givenAtActive(ACTIVE, "1", "2");
 
         page.toggle("2");
