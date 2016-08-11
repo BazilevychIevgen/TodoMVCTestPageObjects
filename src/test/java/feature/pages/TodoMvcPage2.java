@@ -20,7 +20,7 @@ import static com.codeborne.selenide.WebDriverRunner.url;
 /**
  * Created by barocko on 8/10/2016.
  */
-public class TodoMvcPage {
+public class TodoMvcPage2 {
 
     public ElementsCollection tasks = $$("#todo-list li");
 
