@@ -1,18 +1,19 @@
 package feature;
 
-import feature.pages.TodoMVCPage;
+import feature.pages.TodoMVC;
 import org.junit.Test;
 
-import static feature.pages.TodoMVCPage.TaskType.ACTIVE;
-import static feature.pages.TodoMVCPage.TaskType.COMPLETED;
+
+import static feature.pages.TodoMVC.TaskType.ACTIVE;
+import static feature.pages.TodoMVC.TaskType.COMPLETED;
 
 
 /**
  * Created by barocko on 8/10/2016.
  */
-public class TodoMvcTestAtAllTest extends BaseTest {
+public class TodoMVCTestAtAllTest extends BaseTest {
 
-    TodoMVCPage page = new TodoMVCPage();
+    TodoMVC page = new TodoMVC();
 
 
     @Test
