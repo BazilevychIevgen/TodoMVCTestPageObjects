@@ -1,14 +1,13 @@
 package feature;
 
 import feature.pages.TodoMvcPage;
-import feature.pages.TodoMvcPage;
 import org.junit.Test;
 
 
 /**
  * Created by barocko on 7/25/2016.
  */
-public class TodoMVCTestLifeCycleTest extends BaseTest {
+public class TodoMvcTestLifeCycleTest2 extends BaseTest {
 
     TodoMvcPage page = new TodoMvcPage();
 
