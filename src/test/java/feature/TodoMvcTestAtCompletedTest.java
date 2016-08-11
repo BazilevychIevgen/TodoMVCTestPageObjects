@@ -11,7 +11,7 @@ import static feature.pages.TodoMvcPage.TaskType.COMPLETED;
 /**
  * Created by barocko on 8/10/2016.
  */
-public class TodoMvcTestAtCompletedTest2 extends BaseTest {
+public class TodoMvcTestAtCompletedTest extends BaseTest {
 
     TodoMvcPage page = new TodoMvcPage();
 

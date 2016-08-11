@@ -7,7 +7,7 @@ import org.junit.Test;
 /**
  * Created by barocko on 7/25/2016.
  */
-public class TodoMvcTestLifeCycleTest2 extends BaseTest {
+public class TodoMvcTestLifeCycleTest extends BaseTest {
 
     TodoMvcPage page = new TodoMvcPage();
 
