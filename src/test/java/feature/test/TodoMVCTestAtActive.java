@@ -12,7 +12,7 @@ import static feature.test.pages.TodoMVCPage.TaskType.COMPLETED;
  */
 public class TodoMVCTestAtActive extends BaseTest {
 
-    TodoMVCPage page=new TodoMVCPage();
+    TodoMVCPage page = new TodoMVCPage();
 
     @Test
     public void testEdit() {
